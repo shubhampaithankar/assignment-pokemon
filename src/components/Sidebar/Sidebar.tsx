@@ -1,21 +1,22 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 //css
 import './Sidebar.scss'
 
 function Sidebar() {
+  const regions = ['Kanto', 'Johto', 'Hoenn', 'Sinnoh', 'Unova', 'Kalos', 'Alola', 'Galar']
   return (
     <aside className='d-flex flex-column align-items-center'>
       <h3 className='p-2'>Find Pokemon</h3>
       <ul className='sidenav'>
-        <li className='sidenav-item' role='button'>Gen I</li>
-        <li className='sidenav-item' role='button'>Gen II</li>
-        <li className='sidenav-item' role='button'>Gen III</li>
-        <li className='sidenav-item' role='button'>Gen IV</li>
-        <li className='sidenav-item' role='button'>Gen V</li>
-        <li className='sidenav-item' role='button'>Gen VI</li>
-        <li className='sidenav-item' role='button'>Gen VII</li>
-        <li className='sidenav-item' role='button'>Gen VIII</li>
+        { regions.map((region, i) => {
+          return (
+            <li key={i} className='sidenav-item' role='button'>
+              <Link to={`/pokemon?${i + 1}`}>{region}</Link>
+            </li>
+          )
+        }) }
       </ul>
     </aside>
   )

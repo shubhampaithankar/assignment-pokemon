@@ -20,6 +20,6 @@ export class TrainerService {
     }
 
     public static getAllTrainers = () => {
-        return axios.get<Trainer[]>(`${this.apiURL}/trainers`).then(res => res.data)
+        return axios.get<Trainer[]>(`${this.apiURL}/trainers`).then(({ data }) => data)
     }
 }
