@@ -1,10 +1,13 @@
 import React from 'react'
+import { Navigate } from 'react-router-dom'
 
 
-function Pokemon() {
+function Pokemon({ isLoggedIn } : any) {
 
   return (
-    <>Pokemon</>
+    <>
+      { isLoggedIn ? (<></>) : (<Navigate to='/' />)}
+    </>
   )
 }
 

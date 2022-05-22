@@ -7,11 +7,11 @@ import './Navbar.scss'
 import { AuthenticationService } from '../../services'
 import { Link, useNavigate, } from 'react-router-dom'
 
-function Navbar({ isLoggedIn }: any) {
+function Navbar({ isLoggedIn, setIsLoggedIn }: any) {
   const navigate = useNavigate()
 
   const OnLogOut = () => {
-    AuthenticationService.logout()
+    AuthenticationService.logout(setIsLoggedIn)
     navigate('/')
   }
   return (
@@ -39,3 +39,19 @@ function Navbar({ isLoggedIn }: any) {
 }
 
 export default Navbar
+
+// const Dropdown = (name: any) => {
+//   return (
+//     <>
+//       <label>
+//         Trainer: {name}
+//         <select onChange={() => {}}>
+//           <option value="myPokemon">My Pokemon</option>
+//           <option value="settings">Settings</option>
+//           <hr />
+//           <option value="logout">LogOut</option>
+//         </select>
+//       </label>
+//     </>
+//   )
+// }
