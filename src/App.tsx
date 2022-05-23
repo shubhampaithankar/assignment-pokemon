@@ -26,7 +26,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-
     TrainerService.setDefaultConfig()
 
     const localTrainers = JSON.parse(localStorage.getItem('trainers') as string)
@@ -58,9 +57,7 @@ function App() {
         }
       }
     })
-
     setIsLoggedIn(JSON.parse(localStorage.getItem('isLoggedIn') as string) ? JSON.parse(localStorage.getItem('isLoggedIn') as string) : false )
-
   }, [])
 
   return (
@@ -70,8 +67,9 @@ function App() {
       <main className={ isLoggedIn ? 'logged-in' : '' }>
       <Routes>
           <Route path='/' element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}  />
-          <Route path='/pokemon' element={<Pokemon isLoggedIn={isLoggedIn} />} />
-          <Route path='/trainer' element={<Trainer isLoggedIn={isLoggedIn} />} />        
+          <Route path='/pokemon/:gen' element={<Pokemon isLoggedIn={isLoggedIn} />} />
+          <Route path='/trainer' element={<Trainer isLoggedIn={isLoggedIn} />} />  
+          <Route path='*' />      
         </Routes>
       </main>
     </Router>

@@ -13,7 +13,7 @@ function Sidebar() {
         { regions.map((region, i) => {
           return (
             <li key={i} className='sidenav-item' role='button'>
-              <Link to={`/pokemon?${i + 1}`}>{region}</Link>
+              <Link to={`/pokemon/${i + 1}`}>{region}</Link>
             </li>
           )
         }) }

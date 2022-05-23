@@ -1,20 +1,23 @@
 import React from 'react'
-import { Pokemon } from '../../models/Pokemon'
+
+//services
+import { UtilityService } from '../../services'
 
 //css
 import './PokemonCard.scss'
 
 function PokemonCard({ pokemon, btnName, btnFunction }: any) {
   const { name, sprites: { other: { 'official-artwork': { front_default = '' } } }, types } = pokemon
+
   return (
     <div className="card">
         <img className="card-img-top" src={front_default} alt='' />
         <div className="card-body text-center">
-            <h5 className="card-title">{name}</h5>
+            <h5 className="card-title">{UtilityService.capitalizeString(name)}</h5>
             <p className="card-text">
-              { types.map((type: any, i: number) => {
+              { types.map((entry: any, i: number) => {
                 return (
-                  <button className={`type-btn ${type.name}`}>{type.name}</button>
+                  <button key={i} className={`type-btn mx-1 ${entry.type.name}`}>{UtilityService.capitalizeString(entry.type.name)}</button>
                 )
               }) }
             </p>

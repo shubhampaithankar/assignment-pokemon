@@ -20,7 +20,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
     e.preventDefault()
     const data = new FormData(e.target)
     let username = data.get('username')
-    AuthenticationService.login(username, setIsLoggedIn) ? navigate('/pokemon') : alert(`User does not exist`);
+    AuthenticationService.login(username, setIsLoggedIn) ? navigate('/pokemon/1') : alert(`User does not exist`);
   }
 
   const HandleRegister = (e: any) => {
@@ -38,7 +38,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
 
   return (
     <>
-      { isLoggedIn ? <Navigate to='/pokemon' /> : (
+      { isLoggedIn ? <Navigate to='/pokemon/1' /> : (
           <div className="container-fluid">
             <section className="row justify-content-center align-items-center">
               <div className="col-12">

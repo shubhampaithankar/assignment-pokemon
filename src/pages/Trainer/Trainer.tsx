@@ -9,24 +9,45 @@ import Pokeball from '../../components/Pokeball/Pokeball'
 import { Pokemon, Trainer as currentTrainer } from '../../models'
 
 //Services
-import { PokemonService } from '../../services'
+import { PokemonService, TrainerService } from '../../services'
 
 //css
 import './Trainer.scss'
 
 function Trainer({ isLoggedIn } : any) {
-  let [first]: currentTrainer[] = JSON.parse(localStorage.getItem('currentUser') as string)
-  let pokemonArr: Pokemon[] = []
 
-  const [trainerPokemon, setTrainerPokemon] = useState(pokemonArr)
+  let trainers: currentTrainer[] = JSON.parse(localStorage.getItem('trainers') as string)
+  let currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)
+
+  const [trainerPokemon, setTrainerPokemon] = useState([])
 
   useEffect(() => {
-    let arr = PokemonService.getPokemonData(first.pokemon)
-    setTrainerPokemon(arr)
-  }, [first.pokemon])
+    if (!trainerPokemon.length ) { 
+      PokemonService.getPokemonData(currentTrainer?.pokemon)
+        .then((res: any) => {
+          setTimeout(() => {
+            setTrainerPokemon(res)
+          }, 100 * 10)
+        })
+    }
+  })
 
-  const releasePokemon = (pokemon: any) => {
-    console.log(`released mon: ${pokemon}`)
+  const releasePokemon = (pokemon: Pokemon) => {
+    if (currentTrainer.pokemon.length === 1) return alert(`You cannot release your last pokemon`)
+    try {
+
+      currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
+      TrainerService.updateTrainer(currentTrainer)
+        .then((trainer: currentTrainer) => {
+          localStorage.setItem('currentUser', JSON.stringify(trainer))
+          trainers = trainers.map((t: currentTrainer) => t.id == trainer.id ? {...t, pokemon: trainer.pokemon} : t)
+          localStorage.setItem('trainers', JSON.stringify(trainers))
+        })
+
+    } catch (error: any) {
+      alert(`Couldnt release ${pokemon}: ${error.message}`)
+      console.log(error)
+    }
   }
 
   return (
@@ -37,10 +58,10 @@ function Trainer({ isLoggedIn } : any) {
               <div className="col-12">
                 <article className='row justify-content-center align-items-center'>
                   { trainerPokemon.length ? (
-                      trainerPokemon.map((pokemon: Pokemon, index: any) => {
+                      trainerPokemon.map((pokemon: Pokemon, i) => {
                         return (
-                          <div key={index} className="col-4 d-flex align-items-center justify-content-center">
-                            <PokemonCard pokemon={pokemon} btnName={'Release'} btnFunction={() => releasePokemon(pokemon)}/>
+                          <div key={i} className="col-4 d-flex align-items-center justify-content-center">
+                            <PokemonCard key={i} pokemon={pokemon} btnName={'Release'} btnFunction={() => releasePokemon(pokemon)}/>
                           </div>
                         )
                       })
