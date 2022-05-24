@@ -4,7 +4,7 @@ import React from 'react'
 import './Navbar.scss'
 
 //services
-import { AuthenticationService } from '../../services'
+import { AuthenticationService } from '../../../services'
 import { Link, useNavigate, } from 'react-router-dom'
 
 function Navbar({ isLoggedIn, setIsLoggedIn }: any) {

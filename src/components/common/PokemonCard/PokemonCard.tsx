@@ -1,7 +1,7 @@
 import React from 'react'
 
 //services
-import { UtilityService } from '../../services'
+import { UtilityService } from '../../../services'
 
 //css
 import './PokemonCard.scss'

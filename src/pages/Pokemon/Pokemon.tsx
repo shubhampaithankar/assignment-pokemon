@@ -5,8 +5,8 @@ import { Navigate, useParams } from 'react-router-dom'
 import { Pokemon as PokemonModel, Trainer } from '../../models'
 
 //Components
-import Pokeball from '../../components/Pokeball/Pokeball'
-import PokemonCard from '../../components/PokemonCard/PokemonCard'
+import Pokeball from '../../components/common/Pokeball/Pokeball'
+import PokemonCard from '../../components/common/PokemonCard/PokemonCard'
 
 //Services
 import { PokemonService, TrainerService, UtilityService } from '../../services'

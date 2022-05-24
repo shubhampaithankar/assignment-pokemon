@@ -10,8 +10,9 @@ import {
 import './App.scss';
 
 //Components
-import Navbar from './components/Navbar/Navbar';
-import Sidebar from './components/Sidebar/Sidebar';
+import Navbar from './components/main/Navbar/Navbar';
+import Sidebar from './components/main/Sidebar/Sidebar';
+import Footer from './components/main/Footer/Footer';
 
 //Models
 // import { Trainer as currentTrainer } from './models';
@@ -81,6 +82,7 @@ function App() {
           <Route path='*' />      
         </Routes>
       </main>
+      <Footer />
     </Router>
   )
 

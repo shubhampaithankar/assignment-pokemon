@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
 //Components
-import PokemonCard from '../../components/PokemonCard/PokemonCard'
-import Pokeball from '../../components/Pokeball/Pokeball'
+import PokemonCard from '../../components/common/PokemonCard/PokemonCard'
+import Pokeball from '../../components/common/Pokeball/Pokeball'
 
 //models
 import { Pokemon, Trainer as currentTrainer } from '../../models'
@@ -62,7 +62,7 @@ function Trainer({ isLoggedIn } : any) {
         <div className='container-fluid'>
           <section className="row justify-content-center align-items-center">
             <div className="col-12">
-              <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }</h2>
+              <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }!</h2>
             </div>
             <div className="col-12">
               { !isLoading ?
