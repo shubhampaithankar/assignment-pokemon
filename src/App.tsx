@@ -19,9 +19,10 @@ import { Navbar, Sidebar, Footer } from './components/main/'
 import Auth from './pages/Auth/Auth';
 import Pokemon from './pages/Pokemon/Pokemon';
 import Trainer from './pages/Trainer/Trainer';
+import ProtectedRoutes from './routes/ProtectedRoutes';
 
 //Services
-import { TrainerService, PokemonService } from './services'
+import { TrainerService, PokemonService, UtilityService } from './services'
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
         localStorage.setItem('trainers', JSON.stringify(apiTrainers))
       } else {
         // console.log(`trainers found`)
-        if (JSON.stringify(localTrainers) !== JSON.stringify(apiTrainers)) {
+        if (!UtilityService.compareTwoObjects(apiTrainers, localTrainers)) {
           localStorage.setItem('trainers', JSON.stringify(apiTrainers))
           // console.log(`trainers not updated, updating from api`)
         }
@@ -53,35 +54,32 @@ function App() {
         localStorage.setItem('pokemonList', JSON.stringify(apiPokemon))
       } else {
         // console.log(`pokemon found`)
-        if (JSON.stringify(localPokemon) !== JSON.stringify(apiPokemon)) {
+        if (!UtilityService.compareTwoObjects(apiPokemon, localPokemon)) {
           localStorage.setItem('pokemonList', JSON.stringify(apiPokemon))
           // console.log(`pokemon not updated, updating from api`)
         }
       }
     })
-    setIsLoggedIn(JSON.parse(sessionStorage.getItem('isLoggedIn') as string) ? JSON.parse(sessionStorage.getItem('isLoggedIn') as string) : false )
 
-    // if (isLoggedIn) {
-    //   const currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)
-    //   TrainerService.getAllTrainers().then(apiTrainers => {
-    //   })
-    // }
+    setIsLoggedIn(JSON.parse(sessionStorage.getItem('isLoggedIn') as string) ? JSON.parse(sessionStorage.getItem('isLoggedIn') as string) : false )
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
-      { isLoggedIn ? (<Sidebar />) : null}
+      { isLoggedIn ? (<Sidebar />) : null }
       <main className={ isLoggedIn ? 'logged-in' : '' }>
         <Routes>
           <Route path='/'>
             <Route index element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>
-            <Route path='pokemon'>
-              <Route path=':gen' element={<Pokemon isLoggedIn={isLoggedIn} />} />
-              <Route index element={<Pokemon isLoggedIn={isLoggedIn} />} />
-            </Route>
-            <Route path='trainer'>
-              <Route index element={<Trainer isLoggedIn={isLoggedIn} />} />
+            <Route path='/' element={<ProtectedRoutes />}>
+              <Route path='pokemon'>
+                <Route path=':gen' element={<Pokemon />} />
+                <Route index element={<Pokemon />} />
+              </Route>
+              <Route path='trainer'>
+                <Route index element={<Trainer />} />
+              </Route>
             </Route>
             <Route path='*' element={<>404 - Page not found</>}/>
           </Route>

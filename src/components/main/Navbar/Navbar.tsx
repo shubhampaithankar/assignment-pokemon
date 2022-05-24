@@ -5,7 +5,7 @@ import './Navbar.scss'
 
 //services
 import { AuthenticationService } from '../../../services'
-import { Link, useNavigate, } from 'react-router-dom'
+import { NavLink, useNavigate, } from 'react-router-dom'
 
 function Navbar({ isLoggedIn, setIsLoggedIn }: any) {
   const navigate = useNavigate()
@@ -22,12 +22,12 @@ function Navbar({ isLoggedIn, setIsLoggedIn }: any) {
         <nav className='navbar-new p-2'>
           <ul className='nav-links d-flex flew-row'>
             <li role="button" className='nav-item'>
-              <Link to='/'>Home</Link>
+              <NavLink to='/'>Home</NavLink>
             </li>
             {  isLoggedIn ? (
               <>
                 <li role="button" className='nav-item'>
-                  <Link to='/trainer'>Profile</Link>
+                  <NavLink to='trainer'>Profile</NavLink>
                 </li>
                 <li role="button" className='nav-item' onClick={() => OnLogOut()}>Log Out</li>
               </>

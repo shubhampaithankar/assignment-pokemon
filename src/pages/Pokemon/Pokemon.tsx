@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 //Models
 import { Pokemon as PokemonModel, Trainer } from '../../models'
 
 //Components
-import Pokeball from '../../components/common/Pokeball/Pokeball'
-import PokemonCard from '../../components/common/PokemonCard/PokemonCard'
+import { Pokeball, PokemonCard } from '../../components/common/'
 
 //Services
 import { PokemonService, TrainerService, UtilityService } from '../../services'
@@ -14,7 +13,7 @@ import { PokemonService, TrainerService, UtilityService } from '../../services'
 //css
 import './Pokemon.scss'
 
-function Pokemon({ isLoggedIn } : any) {
+function Pokemon() {
   const { gen = '1' } = useParams()
   
   let pokemonList = JSON.parse(localStorage.getItem('pokemonList') as string)
@@ -95,35 +94,34 @@ function Pokemon({ isLoggedIn } : any) {
 
   return (
     <>
-      { isLoggedIn ? (
-            <div className='container-fluid'>
-              <section className="row justify-content-center align-items-center">
-                { !isLoading ? (
-                <>
-                  <div className="col-12">
-                    <article className='d-flex flex-column align-items-center justify-content-center'>
-                      <h2 className='text-center'>Generate Random Pokemon</h2>
-                      <button onClick={generateRandomPokemon} className="btn btn-secondary">Generate</button>
-                    </article>
-                  </div>
-                  <div className="col-12">
-                    <article className='row justify-content-center align-items-center'>
-                      {randomPokemon?.map((pokemon: PokemonModel, i) => {
-                      return (
-                      <div key={i}
-                        className="col-lg-2 col-md-3 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
-                        <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={()=> catchPokemon(pokemon)} trainer={currentTrainer} />
-                      </div>
-                      )
-                      })}
-                    </article>
-                  </div>
-                </>
-                ) :
-                <Pokeball rotate={true} /> }
-              </section>
+      <div className='container-fluid'>
+        <section className="row justify-content-center align-items-center">
+          { !isLoading ? (
+          <>
+            <div className="col-12">
+              <article className='d-flex flex-column align-items-center justify-content-center'>
+                <h2 className='text-center'>Generate Random Pokemon</h2>
+                <button onClick={generateRandomPokemon} className="btn btn-secondary">Generate</button>
+              </article>
             </div>
-      ) : (<Navigate to='/' />)}
+            <div className="col-12">
+              <article className='row justify-content-center align-items-center'>
+                {randomPokemon?.map((pokemon: PokemonModel, i) => {
+                return (
+                <div key={i}
+                  className="col-lg-2 col-md-3 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
+                  <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={()=> catchPokemon(pokemon)}
+                    trainer={currentTrainer} />
+                </div>
+                )
+                })}
+              </article>
+            </div>
+          </>
+          ) :
+          <Pokeball rotate={true} /> }
+        </section>
+      </div>
     </>
   )
 }
