@@ -73,11 +73,18 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       { isLoggedIn ? (<Sidebar />) : null}
       <main className={ isLoggedIn ? 'logged-in' : '' }>
-      <Routes>
-          <Route path='/' element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}  />
-          <Route path='/pokemon/:gen' element={<Pokemon isLoggedIn={isLoggedIn} />} />
-          <Route path='/trainer' element={<Trainer isLoggedIn={isLoggedIn} />} />  
-          <Route path='*' />      
+        <Routes>
+          <Route path='/'>
+            <Route index element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>
+            <Route path='pokemon'>
+              <Route path=':gen' element={<Pokemon isLoggedIn={isLoggedIn} />} />
+              <Route index element={<Pokemon isLoggedIn={isLoggedIn} />} />
+            </Route>
+            <Route path='trainer'>
+              <Route index element={<Trainer isLoggedIn={isLoggedIn} />} />
+            </Route>
+            <Route path='*' element={<>404 - Page not found</>}/>
+          </Route>
         </Routes>
       </main>
       <Footer />
