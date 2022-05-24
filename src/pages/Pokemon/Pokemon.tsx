@@ -5,7 +5,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { Pokemon as PokemonModel, Trainer } from '../../models'
 
 //Components
-// import Pokeball from '../../components/Pokeball/Pokeball'
+import Pokeball from '../../components/Pokeball/Pokeball'
 import PokemonCard from '../../components/PokemonCard/PokemonCard'
 
 //Services
@@ -13,19 +13,18 @@ import { PokemonService, TrainerService, UtilityService } from '../../services'
 
 //css
 import './Pokemon.scss'
-import Pokeball from '../../components/Pokeball/Pokeball'
 
 function Pokemon({ isLoggedIn } : any) {
-
   const { gen = '1' } = useParams()
   
   let pokemonList = JSON.parse(localStorage.getItem('pokemonList') as string)
 
   let trainers: Trainer[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: Trainer = JSON.parse(localStorage.getItem('currentUser') as string)
+  let currentTrainer: Trainer = JSON.parse(localStorage.getItem('currentUser') as string)[0]
 
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
+  // const [currentGen, setCurrentGen] = useState(gen)
 
   const getRandomPokemon = (currentGen: any) => {
     let slicedList
@@ -69,22 +68,24 @@ function Pokemon({ isLoggedIn } : any) {
         setTimeout(() => {
           setRandomPokemon(res)
           setisLoading(false)
-        }, 100 * 10)
+        }, 100 * 20)
       })
-  }
+  } 
 
   useEffect(() => {
     generateRandomPokemon()
-  }, [])
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const catchPokemon = (pokemon: PokemonModel) => {
-    if (currentTrainer.pokemon.includes(pokemon.name)) return alert(`You already have ${pokemon.name} in your party.`)
+    if (currentTrainer.pokemon.includes(pokemon.name)) return alert(`You already have ${UtilityService.capitalizeString(pokemon.name)} in your party.`)
     currentTrainer.pokemon.push(pokemon.name)
     TrainerService.updateTrainer(currentTrainer)
       .then((trainer: Trainer) => {
-        localStorage.setItem('currentUser', JSON.stringify(trainer))
-        trainers = trainers.map((t: Trainer) => t.id == trainer.id ? {...t, pokemon: trainer.pokemon} : t)
+        localStorage.setItem('currentUser', JSON.stringify([trainer]))
+        trainers = trainers.map((t: Trainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
         localStorage.setItem('trainers', JSON.stringify(trainers))
+        alert(`Added ${UtilityService.capitalizeString(pokemon.name)} to your party`)
+        generateRandomPokemon()
       })
   }
 
@@ -93,23 +94,29 @@ function Pokemon({ isLoggedIn } : any) {
       { isLoggedIn ? (
             <div className='container-fluid'>
               <section className="row justify-content-center align-items-center">
-                <div className="col-12">
-                  <article className='d-flex flex-column align-items-center justify-content-center'>
-                    <h2 className='text-center'>Generate Random Pokemon</h2>
-                    <button onClick={generateRandomPokemon} className="btn btn-secondary">Generate</button>
-                  </article>
-                </div>
-                <div className="col-12">
-                  <article className='row justify-content-center align-items-center'>
-                    { !isLoading ? randomPokemon?.map((pokemon: PokemonModel, i) => {
+                { !isLoading ? (
+                <>
+                  <div className="col-12">
+                    <article className='d-flex flex-column align-items-center justify-content-center'>
+                      <h2 className='text-center'>Generate Random Pokemon</h2>
+                      <button onClick={generateRandomPokemon} className="btn btn-secondary">Generate</button>
+                    </article>
+                  </div>
+                  <div className="col-12">
+                    <article className='row justify-content-center align-items-center'>
+                      {randomPokemon?.map((pokemon: PokemonModel, i) => {
                       return (
-                      <div key={i} className="col-lg-2 col-md-3 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
-                        <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={() => catchPokemon(pokemon)}/>
+                      <div key={i}
+                        className="col-lg-2 col-md-3 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
+                        <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={()=> catchPokemon(pokemon)} />
                       </div>
                       )
-                    }) : <Pokeball /> }
-                  </article>
-                </div>
+                      })}
+                    </article>
+                  </div>
+                </>
+                ) :
+                <Pokeball /> }
               </section>
             </div>
       ) : (<Navigate to='/' />)}

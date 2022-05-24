@@ -28,4 +28,5 @@ code {
 
 .container, .container-fluid {
   height: 100% !important;
+  overflow-y: scroll;
 }

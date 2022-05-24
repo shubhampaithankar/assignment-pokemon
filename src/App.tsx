@@ -13,6 +13,9 @@ import './App.scss';
 import Navbar from './components/Navbar/Navbar';
 import Sidebar from './components/Sidebar/Sidebar';
 
+//Models
+// import { Trainer as currentTrainer } from './models';
+
 //Pages
 import Auth from './pages/Auth/Auth';
 import Pokemon from './pages/Pokemon/Pokemon';
@@ -58,7 +61,13 @@ function App() {
       }
     })
     setIsLoggedIn(JSON.parse(localStorage.getItem('isLoggedIn') as string) ? JSON.parse(localStorage.getItem('isLoggedIn') as string) : false )
-  }, [])
+
+    // if (isLoggedIn) {
+    //   const currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)
+    //   TrainerService.getAllTrainers().then(apiTrainers => {
+    //   })
+    // }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Router>

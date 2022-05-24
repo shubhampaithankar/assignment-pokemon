@@ -24,7 +24,7 @@ export class TrainerService {
     }
 
     public static updateTrainer = (trainer: Trainer) => {
-        const { id = '', pokemon = '' } = trainer
+        const { id = '' } = trainer
         return axios.patch<Trainer>(`${this.apiURL}/trainers/${id}`, trainer).then(({ data }) => data)
     }
 }

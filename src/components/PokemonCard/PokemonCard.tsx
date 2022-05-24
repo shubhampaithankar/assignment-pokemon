@@ -21,7 +21,7 @@ function PokemonCard({ pokemon, btnName, btnFunction }: any) {
                 )
               }) }
             </p>
-            <button onClick={btnFunction} className="btn btn-primary">{btnName}</button>
+            <button onClick={btnFunction} className="btn btn-primary mb-2">{btnName}</button>
         </div>
     </div>
   )

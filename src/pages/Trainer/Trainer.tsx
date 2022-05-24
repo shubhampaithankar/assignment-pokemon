@@ -9,7 +9,7 @@ import Pokeball from '../../components/Pokeball/Pokeball'
 import { Pokemon, Trainer as currentTrainer } from '../../models'
 
 //Services
-import { PokemonService, TrainerService } from '../../services'
+import { PokemonService, TrainerService, UtilityService } from '../../services'
 
 //css
 import './Trainer.scss'
@@ -17,31 +17,37 @@ import './Trainer.scss'
 function Trainer({ isLoggedIn } : any) {
 
   let trainers: currentTrainer[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)
+  let currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)[0]
 
   const [trainerPokemon, setTrainerPokemon] = useState([])
+  const [isLoading, setisLoading] = useState(false)
+
+  const getPokemonData = (trainer: currentTrainer) => {
+    setisLoading(true)
+    PokemonService.getPokemonData(trainer.pokemon)
+      .then((res: any) => {
+        setTimeout(() => {
+          setTrainerPokemon(res)
+          setisLoading(false)
+        }, 100 * 10)
+      })
+  }
 
   useEffect(() => {
-    if (!trainerPokemon.length ) { 
-      PokemonService.getPokemonData(currentTrainer?.pokemon)
-        .then((res: any) => {
-          setTimeout(() => {
-            setTrainerPokemon(res)
-          }, 100 * 10)
-        })
-    }
-  })
+    getPokemonData(currentTrainer)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const releasePokemon = (pokemon: Pokemon) => {
     if (currentTrainer.pokemon.length === 1) return alert(`You cannot release your last pokemon`)
     try {
-
       currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
       TrainerService.updateTrainer(currentTrainer)
         .then((trainer: currentTrainer) => {
-          localStorage.setItem('currentUser', JSON.stringify(trainer))
-          trainers = trainers.map((t: currentTrainer) => t.id == trainer.id ? {...t, pokemon: trainer.pokemon} : t)
+          localStorage.setItem('currentUser', JSON.stringify([trainer]))
+          trainers = trainers.map((t: currentTrainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
           localStorage.setItem('trainers', JSON.stringify(trainers))
+          alert(`Released ${UtilityService.capitalizeString(pokemon.name)} from your party`)
+          getPokemonData(trainer)
         })
 
     } catch (error: any) {
@@ -54,21 +60,28 @@ function Trainer({ isLoggedIn } : any) {
     <>
       { isLoggedIn ? (
         <div className='container-fluid'>
-           <section className="row justify-content-center align-items-center">
+          <section className="row justify-content-center align-items-center">
+            { !isLoading ?
+            <>
               <div className="col-12">
                 <article className='row justify-content-center align-items-center'>
-                  { trainerPokemon.length ? (
-                      trainerPokemon.map((pokemon: Pokemon, i) => {
-                        return (
-                          <div key={i} className="col-4 d-flex align-items-center justify-content-center">
-                            <PokemonCard key={i} pokemon={pokemon} btnName={'Release'} btnFunction={() => releasePokemon(pokemon)}/>
-                          </div>
-                        )
-                      })
-                    )  : <Pokeball /> }
+                  {
+                  trainerPokemon.map((pokemon: Pokemon, i) => {
+                  return (
+                  <div key={i}
+                    className="col-lg-3 col-md-4 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
+                    <PokemonCard key={i} pokemon={pokemon} btnName={'Release'} btnFunction={()=>
+                      releasePokemon(pokemon)}/>
+                  </div>
+                  )
+                  }) }
+
                 </article>
               </div>
-            </section>
+            </>
+            :
+            <Pokeball /> }
+          </section>
         </div>
       ) : (<Navigate to='/' />)}
     </>

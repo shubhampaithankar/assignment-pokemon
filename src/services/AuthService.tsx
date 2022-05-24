@@ -8,7 +8,7 @@ export class AuthenticationService {
     static trainers = JSON.parse(localStorage.getItem('trainers') as string)
 
     public static login = (username: any, setIsLoggedIn: any) => {
-        const user= this.trainers.filter((u: any) => u.username === username)
+        let user = this.trainers.filter((u: any) => u.username === username)
         if (user.length) {
             localStorage.setItem('isLoggedIn', 'true')
             localStorage.setItem('currentUser', JSON.stringify(user))
