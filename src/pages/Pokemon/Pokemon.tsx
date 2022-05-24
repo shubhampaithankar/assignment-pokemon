@@ -20,7 +20,7 @@ function Pokemon({ isLoggedIn } : any) {
   let pokemonList = JSON.parse(localStorage.getItem('pokemonList') as string)
 
   let trainers: Trainer[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: Trainer = JSON.parse(localStorage.getItem('currentUser') as string)[0]
+  let currentTrainer: Trainer = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
 
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
@@ -81,7 +81,7 @@ function Pokemon({ isLoggedIn } : any) {
     currentTrainer.pokemon.push(pokemon.name)
     TrainerService.updateTrainer(currentTrainer)
       .then((trainer: Trainer) => {
-        localStorage.setItem('currentUser', JSON.stringify([trainer]))
+        sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
         trainers = trainers.map((t: Trainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
         localStorage.setItem('trainers', JSON.stringify(trainers))
         alert(`Added ${UtilityService.capitalizeString(pokemon.name)} to your party`)

@@ -17,7 +17,7 @@ import './Trainer.scss'
 function Trainer({ isLoggedIn } : any) {
 
   let trainers: currentTrainer[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)[0]
+  let currentTrainer: currentTrainer = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
 
   const [trainerPokemon, setTrainerPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
@@ -43,7 +43,7 @@ function Trainer({ isLoggedIn } : any) {
       currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
       TrainerService.updateTrainer(currentTrainer)
         .then((trainer: currentTrainer) => {
-          localStorage.setItem('currentUser', JSON.stringify([trainer]))
+          sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
           trainers = trainers.map((t: currentTrainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
           localStorage.setItem('trainers', JSON.stringify(trainers))
           alert(`Released ${UtilityService.capitalizeString(pokemon.name)} from your party`)
@@ -61,9 +61,12 @@ function Trainer({ isLoggedIn } : any) {
       { isLoggedIn ? (
         <div className='container-fluid'>
           <section className="row justify-content-center align-items-center">
-            { !isLoading ?
-            <>
-              <div className="col-12">
+            <div className="col-12">
+              <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }</h2>
+            </div>
+            <div className="col-12">
+              { !isLoading ?
+              <>
                 <article className='row justify-content-center align-items-center'>
                   {
                   trainerPokemon.map((pokemon: Pokemon, i) => {
@@ -75,12 +78,16 @@ function Trainer({ isLoggedIn } : any) {
                   </div>
                   )
                   }) }
-
                 </article>
-              </div>
-            </>
-            :
-            <Pokeball /> }
+              </>
+              : 
+              <>
+                <article className='d-flex justify-content-center align-items-center'>
+                  <Pokeball />
+                </article>
+              </> 
+              }
+            </div>
           </section>
         </div>
       ) : (<Navigate to='/' />)}

@@ -60,7 +60,7 @@ function App() {
         }
       }
     })
-    setIsLoggedIn(JSON.parse(localStorage.getItem('isLoggedIn') as string) ? JSON.parse(localStorage.getItem('isLoggedIn') as string) : false )
+    setIsLoggedIn(JSON.parse(sessionStorage.getItem('isLoggedIn') as string) ? JSON.parse(sessionStorage.getItem('isLoggedIn') as string) : false )
 
     // if (isLoggedIn) {
     //   const currentTrainer: currentTrainer = JSON.parse(localStorage.getItem('currentUser') as string)

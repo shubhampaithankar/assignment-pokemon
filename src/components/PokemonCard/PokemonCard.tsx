@@ -11,7 +11,7 @@ function PokemonCard({ pokemon, btnName, btnFunction }: any) {
 
   return (
     <div className="card">
-        <img className="card-img-top" src={front_default} alt='' />
+        <img className="card-img-top" src={front_default} alt={front_default} />
         <div className="card-body text-center">
             <h5 className="card-title">{UtilityService.capitalizeString(name)}</h5>
             <p className="card-text">

@@ -10,8 +10,8 @@ export class AuthenticationService {
     public static login = (username: any, setIsLoggedIn: any) => {
         let user = this.trainers.filter((u: any) => u.username === username)
         if (user.length) {
-            localStorage.setItem('isLoggedIn', 'true')
-            localStorage.setItem('currentUser', JSON.stringify(user))
+            sessionStorage.setItem('isLoggedIn', 'true')
+            sessionStorage.setItem('currentUser', JSON.stringify(user))
             setIsLoggedIn(true)
             return true
         } else {
@@ -43,8 +43,8 @@ export class AuthenticationService {
     }
 
     public static logout = (setIsLoggedIn: any) => {
-        localStorage.setItem('isLoggedIn', 'false')
-        localStorage.setItem('currentUser', '')
+        sessionStorage.setItem('isLoggedIn', 'false')
+        sessionStorage.setItem('currentUser', '')
         setIsLoggedIn(false)
     }
 }
