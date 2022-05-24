@@ -6,7 +6,7 @@ import './Footer.scss'
 function Footer() {
   return (
     <footer>
-      <p className="m-0 p-0">Copyright</p>
+      <p className="m-0 p-0 copyright-text">Copyright Shubham Paithankar</p>
     </footer>
   )
 }

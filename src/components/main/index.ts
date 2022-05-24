@@ -1,3 +1,5 @@
-export * as Navbar from './Navbar/Navbar'
-export * as Sidebar from './Sidebar/Sidebar'
-export * as Footer from './Footer/Footer'
+import Sidebar from "./Sidebar/Sidebar"
+import Navbar from "./Navbar/Navbar"
+import Footer from "./Footer/Footer"
+
+export { Sidebar, Navbar, Footer }

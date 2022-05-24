@@ -24,7 +24,6 @@ function Pokemon({ isLoggedIn } : any) {
 
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
-  // const [currentGen, setCurrentGen] = useState(gen)
 
   const getRandomPokemon = (currentGen: any) => {
     let slicedList
@@ -77,8 +76,12 @@ function Pokemon({ isLoggedIn } : any) {
   }, [])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const catchPokemon = (pokemon: PokemonModel) => {
+
     if (currentTrainer.pokemon.includes(pokemon.name)) return alert(`You already have ${UtilityService.capitalizeString(pokemon.name)} in your party.`)
+    if (currentTrainer.pokemon.length === 6) return alert(`You cannot have more than 6 pokemon in your party`)
+
     currentTrainer.pokemon.push(pokemon.name)
+    
     TrainerService.updateTrainer(currentTrainer)
       .then((trainer: Trainer) => {
         sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
@@ -87,6 +90,7 @@ function Pokemon({ isLoggedIn } : any) {
         alert(`Added ${UtilityService.capitalizeString(pokemon.name)} to your party`)
         generateRandomPokemon()
       })
+
   }
 
   return (

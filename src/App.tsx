@@ -10,9 +10,7 @@ import {
 import './App.scss';
 
 //Components
-import Navbar from './components/main/Navbar/Navbar';
-import Sidebar from './components/main/Sidebar/Sidebar';
-import Footer from './components/main/Footer/Footer';
+import { Navbar, Sidebar, Footer } from './components/main/'
 
 //Models
 // import { Trainer as currentTrainer } from './models';

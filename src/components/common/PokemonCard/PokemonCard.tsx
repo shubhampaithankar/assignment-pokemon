@@ -7,13 +7,14 @@ import { UtilityService } from '../../../services'
 import './PokemonCard.scss'
 
 function PokemonCard({ pokemon, btnName, btnFunction }: any) {
-  const { name, sprites: { other: { 'official-artwork': { front_default = '' } } }, types } = pokemon
+  const { name, sprites: { other: { 'official-artwork': { front_default = '' } } }, types, id } = pokemon
 
   return (
     <div className="card">
         <img className="card-img-top" src={front_default} alt={front_default} />
         <div className="card-body text-center">
             <h5 className="card-title">{UtilityService.capitalizeString(name)}</h5>
+            <h6 className=''>National Dex: #{id}</h6>
             <p className="card-text">
               { types.map((entry: any, i: number) => {
                 return (
