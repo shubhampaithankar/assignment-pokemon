@@ -44,7 +44,7 @@ export class AuthenticationService {
 
     public static logout = (setIsLoggedIn: any) => {
         sessionStorage.setItem('isLoggedIn', 'false')
-        sessionStorage.setItem('currentUser', '')
+        sessionStorage.setItem('currentUser', '[]')
         setIsLoggedIn(false)
     }
 }
