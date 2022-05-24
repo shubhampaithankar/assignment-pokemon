@@ -112,7 +112,7 @@ function Pokemon({ isLoggedIn } : any) {
                       return (
                       <div key={i}
                         className="col-lg-2 col-md-3 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
-                        <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={()=> catchPokemon(pokemon)} />
+                        <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={()=> catchPokemon(pokemon)} trainer={currentTrainer} />
                       </div>
                       )
                       })}
@@ -120,7 +120,7 @@ function Pokemon({ isLoggedIn } : any) {
                   </div>
                 </>
                 ) :
-                <Pokeball /> }
+                <Pokeball rotate={true} /> }
               </section>
             </div>
       ) : (<Navigate to='/' />)}

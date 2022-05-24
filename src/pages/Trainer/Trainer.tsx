@@ -83,7 +83,7 @@ function Trainer({ isLoggedIn } : any) {
               : 
               <>
                 <article className='d-flex justify-content-center align-items-center'>
-                  <Pokeball />
+                  <Pokeball rotate={true}/>
                 </article>
               </> 
               }

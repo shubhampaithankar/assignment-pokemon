@@ -33,25 +33,16 @@ function Navbar({ isLoggedIn, setIsLoggedIn }: any) {
               </>
             ) :  null }
           </ul>
+          <Dropdown name={'ash'} />
         </nav>
     </header>
   )
 }
 
 export default Navbar
-
-// const Dropdown = (name: any) => {
-//   return (
-//     <>
-//       <label>
-//         Trainer: {name}
-//         <select onChange={() => {}}>
-//           <option value="myPokemon">My Pokemon</option>
-//           <option value="settings">Settings</option>
-//           <hr />
-//           <option value="logout">LogOut</option>
-//         </select>
-//       </label>
-//     </>
-//   )
-// }
+const Dropdown = (name: any) => {
+  return (
+    <>
+    </>
+  )
+}

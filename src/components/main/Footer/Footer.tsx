@@ -6,7 +6,7 @@ import './Footer.scss'
 function Footer() {
   return (
     <footer>
-      <p className="m-0 p-0 copyright-text">Copyright Shubham Paithankar</p>
+      <p className="my-0 mx-2 p-0 copyright-text">Copyright © - Shubham Paithankar - 2022</p>
     </footer>
   )
 }
