@@ -12,13 +12,18 @@ function Sidebar() {
   let gen = Number(location.pathname.split('').pop())
   const [activeLink, setActiveLink] = useState(gen)
 
-  useEffect(() => {
+  const isActive = (i:number) => {
+    if (activeLink === (i+1) && location.pathname.startsWith(`/pokemon/`)) {
+      return true
+    } else {
+      return false
+    }
+  }
 
+  useEffect(() => {
     if (location.pathname.startsWith('/pokemon')) {
       setActiveLink(gen)
-      // console.log(activeLink)
     }
-
   }, [location.pathname, gen, activeLink]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -27,7 +32,7 @@ function Sidebar() {
       <ul className='sidenav'>
         { regions.map((region, i) => {
           return (
-            <li key={i} className={`${activeLink === (i+1) ? 'active-li' : ''}  sidenav-item`} role='button'>
+            <li key={i} className={`${isActive(i) ? 'active-li' : ''}  sidenav-item`} role='button'>
               <NavLink to={`pokemon/${i + 1}`}>{region}</NavLink>
             </li>
           )
