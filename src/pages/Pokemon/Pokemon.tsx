@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { Pokemon as PokemonModel, Trainer } from '../../models'
 
 //Components
-import { Pokeball, PokemonCard } from '../../components/common/'
+import { Modal, Pokeball, PokemonCard } from '../../components/common/'
 
 //Services
 import { PokemonService, TrainerService, UtilityService } from '../../services'
@@ -23,6 +23,17 @@ function Pokemon() {
 
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
+
+  //Modal
+  const [show, setShow] = useState(false)
+  const [modalData, setModalData] = useState({
+    title: '',
+    body: <></>
+  })
+
+  const onClose = () => {
+    setShow(false)
+  }
 
   const getRandomPokemon = (currentGen: any) => {
     let slicedList
@@ -76,8 +87,32 @@ function Pokemon() {
 
   const catchPokemon = (pokemon: PokemonModel) => {
 
-    if (currentTrainer.pokemon.includes(pokemon.name)) return alert(`You already have ${UtilityService.capitalizeString(pokemon.name)} in your party.`)
-    if (currentTrainer.pokemon.length === 6) return alert(`You cannot have more than 6 pokemon in your party`)
+    if (currentTrainer.pokemon.includes(pokemon.name)) {
+      setShow(true)
+      setModalData({
+        title: `Error`,
+        body: (
+          <>
+            <h5>Unable to catch {UtilityService.capitalizeString(pokemon.name)}</h5>
+            <p className="p-0 m-0">You already have {UtilityService.capitalizeString(pokemon.name)} in your party</p>
+          </>
+        )
+      })
+      return
+    }
+    if (currentTrainer.pokemon.length === 6) {
+      setShow(true)
+      setModalData({
+        title: `Error`,
+        body: (
+          <>
+            <h5>Unable to catch {UtilityService.capitalizeString(pokemon.name)}</h5>
+            <p className="p-0 m-0">You cannot have more than 6 in your party</p>
+          </>
+        )
+      })
+      return
+    }
 
     currentTrainer.pokemon.push(pokemon.name)
     
@@ -86,7 +121,15 @@ function Pokemon() {
         sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
         trainers = trainers.map((t: Trainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
         localStorage.setItem('trainers', JSON.stringify(trainers))
-        alert(`Added ${UtilityService.capitalizeString(pokemon.name)} to your party`)
+        setShow(true)
+        setModalData({
+          title: `Caught Pokemon`,
+          body: (
+            <>
+              <h5>Added {UtilityService.capitalizeString(pokemon.name)} to your party</h5>
+            </>
+          )
+        })
         generateRandomPokemon()
       })
 
@@ -94,6 +137,9 @@ function Pokemon() {
 
   return (
     <>
+      <Modal show={show} title={modalData.title} onClose={onClose}>
+        { modalData.body }
+      </Modal>
       <div className='container-fluid'>
         <section className="row justify-content-center align-items-center">
           { !isLoading ? (
