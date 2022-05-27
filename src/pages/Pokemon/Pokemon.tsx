@@ -137,10 +137,10 @@ function Pokemon() {
 
   return (
     <>
-      <Modal show={show} title={modalData.title} onClose={onClose}>
-        { modalData.body }
-      </Modal>
       <div className='container-fluid'>
+        <Modal show={show} title={modalData.title} onClose={onClose}>
+          { modalData.body }
+        </Modal>
         <section className="row justify-content-center align-items-center">
           { !isLoading ? (
           <>

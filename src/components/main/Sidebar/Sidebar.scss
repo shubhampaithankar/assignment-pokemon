@@ -1,12 +1,25 @@
 aside {
+    width: 220px;
+    height: 100%;
+    position: fixed;
+}
+
+.sidebar-div {
     background-color: #757575;
     height: 100%;
-    width: 220px;
-    position: fixed;
+}
+
+.expanded {
+    display: block;
+}
+
+.closed {
+    display: none;
 }
 
 h3 {
     margin: 0;
+    color: white;
 }
 
 li a {
@@ -30,4 +43,17 @@ li a {
 
 .active {
     color: #252525;
+}
+
+.toggle-btn {
+    position: absolute;
+    top: 5px;
+    border-radius: 0;
+    background-color: #757575;
+    color: white;
+    font-weight: 700;
+}
+
+.toggle-btn:focus {
+    box-shadow: none;
 }
