@@ -69,7 +69,7 @@ function App() {
     <Router>
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
       { isLoggedIn ? (<Sidebar isSidebarExpanded={isSidebarExpanded} setIsSidebarExpanded={setIsSidebarExpanded}/>) : null }
-      <main className={isSidebarExpanded ? 'expanded-sidebar' : '' }>
+      <main className={isSidebarExpanded && isLoggedIn ? 'expanded-sidebar' : '' }>
         <Routes>
           <Route path='/'>
             <Route index element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>

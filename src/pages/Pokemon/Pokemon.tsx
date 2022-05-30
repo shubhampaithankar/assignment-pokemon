@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 //Models
 import { Pokemon as PokemonModel, Trainer } from '../../models'
@@ -15,6 +15,7 @@ import './Pokemon.scss'
 
 function Pokemon() {
   const { gen = '1' } = useParams()
+  const location = useLocation()
   
   let pokemonList = JSON.parse(localStorage.getItem('pokemonList') as string)
 
@@ -83,7 +84,7 @@ function Pokemon() {
 
   useEffect(() => {
     generateRandomPokemon()
-  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
+  }, [location])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const catchPokemon = (pokemon: PokemonModel) => {
 
