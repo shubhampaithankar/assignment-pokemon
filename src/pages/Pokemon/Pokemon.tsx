@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 //Models
 import { Pokemon as PokemonModel, Trainer } from '../../models'
@@ -15,6 +15,7 @@ import './Pokemon.scss'
 
 function Pokemon() {
   const { gen = '1' } = useParams()
+  const navigate = useNavigate()
   
   // let pokemonList
 
@@ -53,6 +54,7 @@ function Pokemon() {
   }
 
   useEffect(() => {
+    gen >= '9' ? navigate('/') : navigate(``)
     getGenerationPokemon(gen)
   }, [gen])  // eslint-disable-line react-hooks/exhaustive-deps
 
