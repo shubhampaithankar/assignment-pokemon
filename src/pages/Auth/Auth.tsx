@@ -98,10 +98,10 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
 
   return (
     <>
-      <Modal show={show} title={modalData.title} onClose={onClose}>
-        { modalData.body }
-      </Modal>
       <div className="container-fluid">
+        <Modal show={show} title={modalData.title} onClose={onClose}>
+          { modalData.body }
+        </Modal>
         <section className="row justify-content-center align-items-center">
           <div className="col-12">
             <article className='d-flex flex-column justify-content-center align-items-center'>

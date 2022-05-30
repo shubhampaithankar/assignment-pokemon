@@ -84,11 +84,10 @@ const Trainer = () => {
 
   return (
     <>
-      {/* <ReleasePokemon show={show} onClose={onClose} modalData={modalData} /> */}
-      <Modal show={show} title={modalData.title} onClose={onClose}>
-        { modalData.body }
-      </Modal>
       <div className='container-fluid'>
+        <Modal show={show} title={modalData.title} onClose={onClose}>
+          { modalData.body }
+        </Modal>
         <section className="row justify-content-center align-items-center">
           <div className="col-12">
             <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }!</h2>

@@ -27,6 +27,7 @@ import { TrainerService, PokemonService, UtilityService } from './services'
 function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
 
   useEffect(() => {
     TrainerService.setDefaultConfig()
@@ -67,8 +68,8 @@ function App() {
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
-      { isLoggedIn ? (<Sidebar />) : null }
-      <main className={ isLoggedIn ? 'logged-in' : '' }>
+      { isLoggedIn ? (<Sidebar isSidebarExpanded={isSidebarExpanded} setIsSidebarExpanded={setIsSidebarExpanded}/>) : null }
+      <main className={isSidebarExpanded && isLoggedIn ? 'expanded-sidebar' : '' }>
         <Routes>
           <Route path='/'>
             <Route index element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>
