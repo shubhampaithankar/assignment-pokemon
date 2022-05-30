@@ -30,10 +30,8 @@ function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
 
   useEffect(() => {
-    TrainerService.setDefaultConfig()
-
-    const localTrainers = JSON.parse(localStorage.getItem('trainers') as string)
     TrainerService.getAllTrainers().then(apiTrainers => {
+      const localTrainers = JSON.parse(localStorage.getItem('trainers') as string)
       // console.log(`getting all trainers`)
       if (localTrainers === null || localTrainers.length === 0) {
         // console.log(`trainers not found, adding from api`)
@@ -47,10 +45,10 @@ function App() {
       }
     })
 
-    const localPokemon = JSON.parse(localStorage.getItem(`pokemonList`) as string)
     PokemonService.getPokemonsList().then((apiPokemon) => {
+      const localPokemon = JSON.parse(localStorage.getItem(`pokemonList`) as string)
       // console.log(`getting all pokemon`)
-      if (!localPokemon) {
+      if (localPokemon === null || localPokemon.length === 0 || localPokemon === undefined) {
         // console.log(`pokemon not found, adding from api`)
         localStorage.setItem('pokemonList', JSON.stringify(apiPokemon))
       } else {

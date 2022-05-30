@@ -5,23 +5,25 @@ import { Pokemon } from "../models/"
 
 export class PokemonService {
     //Variables
-    static apiURL = 'https://pokeapi.co/api/v2/pokemon'
+    static apiURL = 'https://pokeapi.co/api/v2'
 
     //Functions
     public static getPokemonsList = () => {
-        return axios.get(`${this.apiURL}?limit=910`)
+        return axios.get(`${this.apiURL}/pokemon?limit=910`)
             .then(({ data: { results } }) => results)
     }
 
     public static getPokemonData = (pokemon: any) => {
         let arr: Pokemon[] = []
         pokemon.forEach(async (p: Pokemon) => {
-            const { data } = await axios.get<Pokemon>(`${this.apiURL}/${p}`)
+            const { data } = await axios.get<Pokemon>(`${this.apiURL}/pokemon/${p}`)
             arr.push(data)
         })
         return new Promise((res, rej) => res(arr))
-        // return axios.get<Pokemon>(`${this.apiURL}/${pokemon}`)
-        //     .then(({ data }) => data)
+    }
+
+    public static getGenerationData = (gen: any) => {
+        return axios.get(`${this.apiURL}/generation/${gen}`).then(({ data }) => data)
     }
 
 }

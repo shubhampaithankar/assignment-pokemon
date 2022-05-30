@@ -51,11 +51,10 @@ const Trainer = () => {
     if (currentTrainer.pokemon.length === 1) {
       setShow(true)
       setModalData({
-        title: `Error`,
+        title: `Unable to release ${UtilityService.capitalizeString(pokemon.name)}`,
         body: (
           <>
-            <h5>Unable to release {UtilityService.capitalizeString(pokemon.name)}</h5>
-            <p className="p-0 m-0">You cannot release last Pokemon from your party</p>
+            <h5>You cannot release last Pokemon from your party</h5>
           </>
         )
       })
@@ -88,7 +87,7 @@ const Trainer = () => {
         <Modal show={show} title={modalData.title} onClose={onClose}>
           { modalData.body }
         </Modal>
-        <section className="row justify-content-center align-items-center">
+        <section className="row justify-content-center align-items-baseline">
           <div className="col-12">
             <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }!</h2>
           </div>
