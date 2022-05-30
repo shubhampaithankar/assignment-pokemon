@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Modal } from '../../components/common'
 import { AuthenticationService } from '../../services'
 
 //css
@@ -7,10 +8,19 @@ import './Auth.scss'
 
 function Auth({ isLoggedIn, setIsLoggedIn }: any) {
 
-  
   const navigate = useNavigate()
-  
+
   const [authLogin, setauthLogin] = useState(true)
+
+  const [show, setShow] = useState(false)
+  const [modalData, setModalData] = useState({
+    title: '',
+    body: <></>
+  })
+
+  const onClose = () => {
+    setShow(false)
+  }
 
   const OnAuthLoginClick = () => {
     setauthLogin(!authLogin)
@@ -20,7 +30,20 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
     e.preventDefault()
     const data = new FormData(e.target)
     let username = data.get('username')
-    AuthenticationService.login(username, setIsLoggedIn) ? navigate('/pokemon/1') : alert(`User does not exist`);
+    if (AuthenticationService.login(username, setIsLoggedIn)) { 
+      navigate('/pokemon/1')
+    } else {
+      setShow(true)
+      setModalData({
+        title: `Unable to login`,
+        body: (
+          <>
+            <h5>User does not exist</h5>
+          </>
+        )
+      })
+      return
+    }
   }
 
   const HandleRegister = (e: any) => {
@@ -31,31 +54,69 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
     const username = data.get('username')
     const confirmUsername = data.get('confirm-username')
 
-    if (username !== confirmUsername) return alert(`Usernames dont match`)
+    if (username !== confirmUsername) {
+      setShow(true)
+      setModalData({
+        title: `Unable to create user`,
+        body: (
+          <>
+            <h5>Usernames dont match</h5>
+          </>
+        )
+      })
+      return
+    }
 
-    AuthenticationService.register(username) ? setauthLogin(true) : alert('Username is taken')
+    if (AuthenticationService.register(username)) {
+      setauthLogin(true)
+      setShow(true)
+      setModalData({
+        title: `Success`,
+        body: (
+          <>
+            <h5>Please login with your username</h5>
+          </>
+        )
+      })
+    } else {
+      setShow(true)
+      setModalData({
+        title: `Unable to create user`,
+        body: (
+          <>
+            <h5>Username is taken</h5>
+          </>
+        )
+      })
+      return
+    }
   }
+
+  useEffect(() => {
+    isLoggedIn ? navigate(`/pokemon/1`) : navigate('/')
+  }, [isLoggedIn, navigate])
 
   return (
     <>
-      { isLoggedIn ? <Navigate to='/pokemon/1' /> : (
-          <div className="container-fluid">
-            <section className="row justify-content-center align-items-center">
-              <div className="col-12">
-                <article className='d-flex flex-column justify-content-center align-items-center'>
-                  <div className="form-box text-center">
-                    { authLogin ?
-                    <LoginForm HandleLogin={HandleLogin} /> :
-                    <RegisterForm HandleRegister={HandleRegister} /> }
-                    <p className='m-0' role='button' onClick={()=> OnAuthLoginClick()}>
-                      { authLogin ? 'New Trainer? Register' : 'Existing Trainer? Login' }
-                    </p>
-                  </div>
-                </article>
+      <div className="container-fluid">
+        <Modal show={show} title={modalData.title} onClose={onClose}>
+          { modalData.body }
+        </Modal>
+        <section className="row justify-content-center align-items-center">
+          <div className="col-12">
+            <article className='d-flex flex-column justify-content-center align-items-center'>
+              <div className="form-box text-center">
+                { authLogin ?
+                <LoginForm HandleLogin={HandleLogin} /> :
+                <RegisterForm HandleRegister={HandleRegister} /> }
+                <p className='m-0' role='button' onClick={()=> OnAuthLoginClick()}>
+                  { authLogin ? 'New Trainer? Register' : 'Existing Trainer? Login' }
+                </p>
               </div>
-            </section>
+            </article>
           </div>
-      ) }
+        </section>
+      </div>
     </>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 //Components
-import { Pokeball, PokemonCard } from '../../components/common/'
+import { Modal, Pokeball, PokemonCard } from '../../components/common/'
 
 //models
 import { Pokemon, Trainer as TrainerModel } from '../../models'
@@ -12,13 +12,24 @@ import { PokemonService, TrainerService, UtilityService } from '../../services'
 //css
 import './Trainer.scss'
 
-function Trainer() {
+const Trainer = () => {
 
   let trainers: TrainerModel[] = JSON.parse(localStorage.getItem('trainers') as string)
   let currentTrainer: TrainerModel = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
 
-  const [trainerPokemon, setTrainerPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
+  const [trainerPokemon, setTrainerPokemon] = useState([])
+  
+  //Modal
+  const [show, setShow] = useState(false)
+  const [modalData, setModalData] = useState({
+    title: '',
+    body: <></>
+  })
+
+  const onClose = () => {
+    setShow(false)
+  }
 
   const getPokemonData = (trainer: TrainerModel) => {
     setisLoading(true)
@@ -36,27 +47,47 @@ function Trainer() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const releasePokemon = (pokemon: Pokemon) => {
-    if (currentTrainer.pokemon.length === 1) return alert(`You cannot release your last pokemon`)
-    try {
-      currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
-      TrainerService.updateTrainer(currentTrainer)
-        .then((trainer: TrainerModel) => {
-          sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
-          trainers = trainers.map((t: TrainerModel) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
-          localStorage.setItem('trainers', JSON.stringify(trainers))
-          alert(`Released ${UtilityService.capitalizeString(pokemon.name)} from your party`)
-          getPokemonData(trainer)
-        })
 
-    } catch (error: any) {
-      alert(`Couldnt release ${pokemon}: ${error.message}`)
-      console.log(error)
+    if (currentTrainer.pokemon.length === 1) {
+      setShow(true)
+      setModalData({
+        title: `Error`,
+        body: (
+          <>
+            <h5>Unable to release {UtilityService.capitalizeString(pokemon.name)}</h5>
+            <p className="p-0 m-0">You cannot release last Pokemon from your party</p>
+          </>
+        )
+      })
+      return
     }
+    
+    currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
+    TrainerService.updateTrainer(currentTrainer)
+      .then((trainer: TrainerModel) => {
+        sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
+        trainers = trainers.map((t: TrainerModel) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
+        localStorage.setItem('trainers', JSON.stringify(trainers))
+        setShow(true)
+        setModalData({
+          title: `Released Pokemon`,
+          body: (
+            <>
+              <h5>Released {UtilityService.capitalizeString(pokemon.name)} from your party</h5>
+            </>
+          )
+        })
+        getPokemonData(trainer)
+      })
+
   }
 
   return (
     <>
       <div className='container-fluid'>
+        <Modal show={show} title={modalData.title} onClose={onClose}>
+          { modalData.body }
+        </Modal>
         <section className="row justify-content-center align-items-center">
           <div className="col-12">
             <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }!</h2>
@@ -92,4 +123,3 @@ function Trainer() {
 }
 
 export default Trainer
-
