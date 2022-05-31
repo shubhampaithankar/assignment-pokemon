@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 //Models
 import { Pokemon as PokemonModel, Trainer } from '../../models'
@@ -15,12 +15,21 @@ import './Pokemon.scss'
 
 function Pokemon() {
   const { gen = '1' } = useParams()
-  const location = useLocation()
-  
-  let pokemonList = JSON.parse(localStorage.getItem('pokemonList') as string)
+  const navigate = useNavigate()
 
   let trainers: Trainer[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: Trainer = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
+  let currentTrainer: Trainer = JSON.parse(sessionStorage.getItem('currentUser') as string)
+
+  let pokemonData = localStorage.getItem('pokemonData') as string
+
+  if (pokemonData == null) {
+    PokemonService.setDefaults()
+      .then(() => {
+        setTimeout(() =>{
+          pokemonData = localStorage.getItem('pokemonData') as string
+        }, 1000 * 1)
+      })
+  }
 
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
@@ -36,79 +45,49 @@ function Pokemon() {
     setShow(false)
   }
 
-  const getRandomPokemon = (currentGen: any) => {
-    let slicedList
-    switch (currentGen) {
-      case '1':
-        slicedList = pokemonList.slice(0, 150) //1 to 151
-        break;
-      case '2':
-        slicedList = pokemonList.slice(151, 250) // 152 to 251
-        break;
-      case '3':
-        slicedList = pokemonList.slice(251, 385) // 252 to 386
-        break;
-      case '4':
-        slicedList = pokemonList.slice(386, 492) // 387 to 493
-        break;
-      case '5':
-        slicedList = pokemonList.slice(493, 648) // 494 to 649
-        break;
-      case '6':
-        slicedList = pokemonList.slice(649, 720) // 650 to 721
-        break;
-      case '7':
-        slicedList = pokemonList.slice(721, 808) // 722 to 809
-        break;
-      case '8':
-        slicedList = pokemonList.slice(809, 904) // 810 to 905
-        break;
-      default:
-        slicedList = pokemonList.slice(0, 150) //1 to 151
-        break;
-    }
-    return UtilityService.randomItemfromArray(slicedList, 10).map(x => x.name)
-  }
-  
-  const generateRandomPokemon = () => {
+  const getGenerationPokemon = async (gen: any) => {
     setisLoading(true)
-    let arr = getRandomPokemon(gen)
+    
+    let { pokemon_species } = JSON.parse(pokemonData).find((g: any) => g.id === Number(gen))
+    let arr = UtilityService.randomItemfromArray(pokemon_species.map((x: any) => x.name), 10)
+
     PokemonService.getPokemonData(arr)
       .then((res: any) => {
         setTimeout(() => {
           setRandomPokemon(res)
           setisLoading(false)
-        }, 100 * 20)
+        }, 1000 * 1)
       })
-  } 
+
+  }
 
   useEffect(() => {
-    generateRandomPokemon()
-  }, [location])  // eslint-disable-line react-hooks/exhaustive-deps
+    gen >= '9' ? navigate('/') : navigate(``)
+    getGenerationPokemon(gen)
+  }, [gen])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const catchPokemon = (pokemon: PokemonModel) => {
 
-    if (currentTrainer.pokemon.includes(pokemon.name)) {
+    if (currentTrainer.pokemon.length === 6) {
       setShow(true)
       setModalData({
-        title: `Error`,
+        title: `Unable to catch ${UtilityService.capitalizeString(pokemon.name)}`,
         body: (
           <>
-            <h5>Unable to catch {UtilityService.capitalizeString(pokemon.name)}</h5>
-            <p className="p-0 m-0">You already have {UtilityService.capitalizeString(pokemon.name)} in your party</p>
+            <h5>You cannot have more than 6 in your party</h5>
           </>
         )
       })
       return
     }
-    if (currentTrainer.pokemon.length === 6) {
+
+    if (currentTrainer.pokemon.includes(pokemon.name)) {
       setShow(true)
       setModalData({
-        title: `Error`,
+        title: `Unable to catch ${UtilityService.capitalizeString(pokemon.name)}`,
         body: (
           <>
-            <h5>Unable to catch {UtilityService.capitalizeString(pokemon.name)}</h5>
-            <p className="p-0 m-0">You cannot have more than 6 in your party</p>
+            <h5>You already have {UtilityService.capitalizeString(pokemon.name)} in your party</h5>
           </>
         )
       })
@@ -118,8 +97,8 @@ function Pokemon() {
     currentTrainer.pokemon.push(pokemon.name)
     
     TrainerService.updateTrainer(currentTrainer)
-      .then((trainer: Trainer) => {
-        sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
+      .then((trainer: any) => {
+        sessionStorage.setItem('currentUser', JSON.stringify(trainer))
         trainers = trainers.map((t: Trainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
         localStorage.setItem('trainers', JSON.stringify(trainers))
         setShow(true)
@@ -131,7 +110,7 @@ function Pokemon() {
             </>
           )
         })
-        generateRandomPokemon()
+        getGenerationPokemon(gen)
       })
 
   }
@@ -142,15 +121,16 @@ function Pokemon() {
         <Modal show={show} title={modalData.title} onClose={onClose}>
           { modalData.body }
         </Modal>
-        <section className="row justify-content-center align-items-center">
+        <section className="row justify-content-center align-items-baseline">
+          <div className="col-12">
+            <article className='d-flex flex-column align-items-center justify-content-center'>
+              <h2 className='text-center'>Generate Random Pokemon</h2>
+              <button disabled={isLoading} onClick={()=> getGenerationPokemon(gen)} className="btn
+                btn-secondary">Generate</button>
+            </article>
+          </div>
           { !isLoading ? (
           <>
-            <div className="col-12">
-              <article className='d-flex flex-column align-items-center justify-content-center'>
-                <h2 className='text-center'>Generate Random Pokemon</h2>
-                <button onClick={generateRandomPokemon} className="btn btn-secondary">Generate</button>
-              </article>
-            </div>
             <div className="col-12">
               <article className='row justify-content-center align-items-center'>
                 {randomPokemon?.map((pokemon: PokemonModel, i) => {

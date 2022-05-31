@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Modal } from '../../components/common'
-import { AuthenticationService } from '../../services'
+import { TrainerService } from '../../services'
 
 //css
 import './Auth.scss'
@@ -30,7 +30,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
     e.preventDefault()
     const data = new FormData(e.target)
     let username = data.get('username')
-    if (AuthenticationService.login(username, setIsLoggedIn)) { 
+    if (TrainerService.loginTrainer(username, setIsLoggedIn)) { 
       navigate('/pokemon/1')
     } else {
       setShow(true)
@@ -67,8 +67,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
       return
     }
 
-    if (AuthenticationService.register(username)) {
-      setauthLogin(true)
+    if (TrainerService.createTrainer(username)) {
       setShow(true)
       setModalData({
         title: `Success`,
@@ -78,6 +77,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
           </>
         )
       })
+      setauthLogin(true)
     } else {
       setShow(true)
       setModalData({
@@ -93,7 +93,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
   }
 
   useEffect(() => {
-    isLoggedIn ? navigate(`/pokemon/1`) : navigate('/')
+    isLoggedIn ? navigate(`/pokemon/1`) : navigate('')
   }, [isLoggedIn, navigate])
 
   return (

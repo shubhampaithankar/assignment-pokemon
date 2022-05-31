@@ -15,7 +15,7 @@ import './Trainer.scss'
 const Trainer = () => {
 
   let trainers: TrainerModel[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: TrainerModel = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
+  let currentTrainer: TrainerModel = JSON.parse(sessionStorage.getItem('currentUser') as string)
 
   const [isLoading, setisLoading] = useState(false)
   const [trainerPokemon, setTrainerPokemon] = useState([])
@@ -38,7 +38,7 @@ const Trainer = () => {
         setTimeout(() => {
           setTrainerPokemon(res)
           setisLoading(false)
-        }, 100 * 10)
+        }, 1000 * 1)
       })
   }
 
@@ -51,11 +51,10 @@ const Trainer = () => {
     if (currentTrainer.pokemon.length === 1) {
       setShow(true)
       setModalData({
-        title: `Error`,
+        title: `Unable to release ${UtilityService.capitalizeString(pokemon.name)}`,
         body: (
           <>
-            <h5>Unable to release {UtilityService.capitalizeString(pokemon.name)}</h5>
-            <p className="p-0 m-0">You cannot release last Pokemon from your party</p>
+            <h5>You cannot release last Pokemon from your party</h5>
           </>
         )
       })
@@ -65,9 +64,7 @@ const Trainer = () => {
     currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
     TrainerService.updateTrainer(currentTrainer)
       .then((trainer: TrainerModel) => {
-        sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
-        trainers = trainers.map((t: TrainerModel) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
-        localStorage.setItem('trainers', JSON.stringify(trainers))
+        sessionStorage.setItem('currentUser', JSON.stringify(trainer))
         setShow(true)
         setModalData({
           title: `Released Pokemon`,
@@ -88,7 +85,7 @@ const Trainer = () => {
         <Modal show={show} title={modalData.title} onClose={onClose}>
           { modalData.body }
         </Modal>
-        <section className="row justify-content-center align-items-center">
+        <section className="row justify-content-center align-items-baseline">
           <div className="col-12">
             <h2 className='text-center'>Welcome { UtilityService.capitalizeString(currentTrainer.username) }!</h2>
           </div>

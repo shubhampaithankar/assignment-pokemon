@@ -4,14 +4,14 @@ import React from 'react'
 import './Navbar.scss'
 
 //services
-import { AuthenticationService } from '../../../services'
+import { TrainerService } from '../../../services'
 import { NavLink, useNavigate, } from 'react-router-dom'
 
 function Navbar({ isLoggedIn, setIsLoggedIn }: any) {
   const navigate = useNavigate()
 
   const OnLogOut = () => {
-    AuthenticationService.logout(setIsLoggedIn)
+    TrainerService.logoutTrainer(setIsLoggedIn)
     navigate('/')
   }
   return (
