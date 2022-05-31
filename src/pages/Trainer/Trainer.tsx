@@ -13,8 +13,7 @@ import { PokemonService, TrainerService, UtilityService } from '../../services'
 import './Trainer.scss'
 
 const Trainer = () => {
-
-  let trainers: TrainerModel[] = JSON.parse(localStorage.getItem('trainers') as string)
+  
   let currentTrainer: TrainerModel = JSON.parse(sessionStorage.getItem('currentUser') as string)
 
   const [isLoading, setisLoading] = useState(false)
