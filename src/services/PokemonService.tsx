@@ -9,11 +9,6 @@ export class PokemonService {
 
     //Functions
     static setDefaults = () => {
-        axios.defaults.baseURL = PokemonService.apiURL
-        axios.defaults.headers.post['Content-Type'] = 'application/json'
-        axios.defaults.headers.put['Content-Type'] = 'application/json'
-        axios.defaults.headers.patch['Content-Type'] = 'application/json'
-
         let pokemonData: any[] = []
         for (let i = 1; i <= 8; i++) {
             this.getGenerationData(i)

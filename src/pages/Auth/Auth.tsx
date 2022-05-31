@@ -68,7 +68,6 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
     }
 
     if (TrainerService.createTrainer(username)) {
-      setauthLogin(true)
       setShow(true)
       setModalData({
         title: `Success`,
@@ -78,6 +77,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
           </>
         )
       })
+      setauthLogin(true)
     } else {
       setShow(true)
       setModalData({

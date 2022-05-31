@@ -12,12 +12,6 @@ export class TrainerService {
 
     //Functions
     static setDefaults = () => {
-        axios.defaults.baseURL = TrainerService.apiURL
-        axios.defaults.headers.common['X-API-Key'] = TrainerService.apiKey
-        axios.defaults.headers.post['Content-Type'] = 'application/json'
-        axios.defaults.headers.put['Content-Type'] = 'application/json'
-        axios.defaults.headers.patch['Content-Type'] = 'application/json'
-
         this.getAllTrainers()
             .then((apiTrainers) => {
                 localStorage.setItem('trainers', JSON.stringify(apiTrainers))
@@ -72,15 +66,20 @@ export class TrainerService {
                         'Content-Type': 'application/json'
                     }
                 })
-                .then(({ data }: any) => {
+                .then(() => {
                     this.setDefaults()
-                    return data
+                    return true
                 })
             }
         }
 
     public static updateTrainer = (trainer: Trainer) => {
         const { id = '' } = trainer
-        return axios.patch<Trainer>(`${this.apiURL}/trainers/${id}`, trainer).then(({ data }) => data)
+        return axios.patch<Trainer>(`${this.apiURL}/trainers/${id}`, trainer, { 
+            headers: {
+                'X-API-Key': this.apiKey,
+                'Content-Type': 'application/json'
+            }
+        }).then(({ data }) => data)
     }
 }
