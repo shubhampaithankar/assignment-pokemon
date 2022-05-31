@@ -13,6 +13,18 @@ export class PokemonService {
         axios.defaults.headers.post['Content-Type'] = 'application/json'
         axios.defaults.headers.put['Content-Type'] = 'application/json'
         axios.defaults.headers.patch['Content-Type'] = 'application/json'
+
+        let pokemonData: any[] = []
+        for (let i = 1; i <= 8; i++) {
+            this.getGenerationData(i)
+                .then((data) => {
+                    pokemonData.push(data)
+                })
+        }
+        setTimeout(() => {
+            localStorage.setItem('pokemonData', JSON.stringify(pokemonData))
+        }, 1000 * 1)
+        return new Promise((res, rej) => res(true))
     }
 
     public static getPokemonsList = () => {

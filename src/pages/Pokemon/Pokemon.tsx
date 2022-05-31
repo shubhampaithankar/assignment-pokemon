@@ -20,6 +20,17 @@ function Pokemon() {
   let trainers: Trainer[] = JSON.parse(localStorage.getItem('trainers') as string)
   let currentTrainer: Trainer = JSON.parse(sessionStorage.getItem('currentUser') as string)
 
+  let pokemonData = localStorage.getItem('pokemonData') as string
+
+  if (pokemonData == null) {
+    PokemonService.setDefaults()
+      .then(() => {
+        setTimeout(() =>{
+          pokemonData = localStorage.getItem('pokemonData') as string
+        }, 1000 * 1)
+      })
+  }
+
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
 
@@ -36,15 +47,9 @@ function Pokemon() {
 
   const getGenerationPokemon = async (gen: any) => {
     setisLoading(true)
-    let pokemonData = localStorage.getItem('pokemonData') as string
-    if (pokemonData) {
-      let data = JSON.parse(pokemonData)
-      console.log(data)
-    }
-    let arr = await PokemonService.getGenerationData(gen)
-      .then(({ pokemon_species }) => {
-        return UtilityService.randomItemfromArray(pokemon_species.map((x: any) => x.name), 10)
-      })
+    
+    let { pokemon_species } = JSON.parse(pokemonData).find((g: any) => g.id === Number(gen))
+    let arr = UtilityService.randomItemfromArray(pokemon_species.map((x: any) => x.name), 10)
 
     PokemonService.getPokemonData(arr)
       .then((res: any) => {
@@ -53,6 +58,7 @@ function Pokemon() {
           setisLoading(false)
         }, 1000 * 1)
       })
+
   }
 
   useEffect(() => {

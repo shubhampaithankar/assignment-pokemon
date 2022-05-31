@@ -22,6 +22,8 @@ export class TrainerService {
             .then((apiTrainers) => {
                 localStorage.setItem('trainers', JSON.stringify(apiTrainers))
             })
+
+        return new Promise((res, rej) => res(true))
     }
 
     public static getAllTrainers = () => {
@@ -31,8 +33,8 @@ export class TrainerService {
     public static loginTrainer = (username: any, setIsLoggedIn: any) => {
 
         let trainers = localStorage.getItem('trainers') as string
-        if (trainers == null) return this.setDefaults()
-
+        if (trainers == null) this.setDefaults()
+        
         const user = JSON.parse(trainers).filter((u: Trainer) => u.username === username).shift()
         if (user) {
             sessionStorage.setItem('isLoggedIn', 'true')
@@ -43,6 +45,7 @@ export class TrainerService {
             this.logoutTrainer(setIsLoggedIn)
             return false
         }
+
     }
 
     public static logoutTrainer = (setIsLoggedIn: any) => {

@@ -93,7 +93,7 @@ function Auth({ isLoggedIn, setIsLoggedIn }: any) {
   }
 
   useEffect(() => {
-    isLoggedIn ? navigate(`/pokemon/1`) : navigate('/')
+    isLoggedIn ? navigate(`/pokemon/1`) : navigate('')
   }, [isLoggedIn, navigate])
 
   return (
