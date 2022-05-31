@@ -65,8 +65,6 @@ const Trainer = () => {
     TrainerService.updateTrainer(currentTrainer)
       .then((trainer: TrainerModel) => {
         sessionStorage.setItem('currentUser', JSON.stringify(trainer))
-        trainers = trainers.map((t: TrainerModel) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
-        localStorage.setItem('trainers', JSON.stringify(trainers))
         setShow(true)
         setModalData({
           title: `Released Pokemon`,

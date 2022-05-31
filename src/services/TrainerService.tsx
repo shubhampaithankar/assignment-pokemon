@@ -80,6 +80,9 @@ export class TrainerService {
                 'X-API-Key': this.apiKey,
                 'Content-Type': 'application/json'
             }
-        }).then(({ data }) => data)
+        }).then(({ data }) => {
+            this.setDefaults()
+            return data
+        })
     }
 }
