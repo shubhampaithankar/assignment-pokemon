@@ -96,7 +96,7 @@ const Trainer = () => {
                 trainerPokemon.map((pokemon: Pokemon, i) => {
                 return (
                 <div key={i}
-                  className="col-lg-3 col-md-4 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
+                  className="col-lg-3 col-md-5 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
                   <PokemonCard key={i} pokemon={pokemon} btnName={'Release'} btnFunction={()=>
                     releasePokemon(pokemon)}/>
                 </div>

@@ -28,6 +28,7 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
+  const [isNavExpanded, setIsNavExpanded] = useState(false)
 
   useEffect(() => {
     TrainerService.setDefaults()
@@ -38,9 +39,9 @@ function App() {
 
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+      <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} isNavExpanded={isNavExpanded} setIsNavExpanded={setIsNavExpanded}/>
       { isLoggedIn ? (<Sidebar isSidebarExpanded={isSidebarExpanded} setIsSidebarExpanded={setIsSidebarExpanded}/>) : null }
-      <main className={isSidebarExpanded && isLoggedIn ? 'expanded-sidebar' : '' }>
+      <main className={`${isSidebarExpanded && isLoggedIn ? 'expanded-sidebar' : ''} ${isNavExpanded && isLoggedIn ? 'expanded-navbar' : ''}`}>
         <Routes>
           <Route path='/'>
             <Route index element={<Auth isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>
