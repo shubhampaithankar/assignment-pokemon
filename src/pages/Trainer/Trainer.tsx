@@ -15,7 +15,7 @@ import './Trainer.scss'
 const Trainer = () => {
 
   let trainers: TrainerModel[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: TrainerModel = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
+  let currentTrainer: TrainerModel = JSON.parse(sessionStorage.getItem('currentUser') as string)
 
   const [isLoading, setisLoading] = useState(false)
   const [trainerPokemon, setTrainerPokemon] = useState([])
@@ -38,7 +38,7 @@ const Trainer = () => {
         setTimeout(() => {
           setTrainerPokemon(res)
           setisLoading(false)
-        }, 100 * 10)
+        }, 1000 * 1)
       })
   }
 
@@ -64,7 +64,7 @@ const Trainer = () => {
     currentTrainer.pokemon = currentTrainer.pokemon.filter((p: string) => p !== pokemon.name)
     TrainerService.updateTrainer(currentTrainer)
       .then((trainer: TrainerModel) => {
-        sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
+        sessionStorage.setItem('currentUser', JSON.stringify(trainer))
         trainers = trainers.map((t: TrainerModel) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
         localStorage.setItem('trainers', JSON.stringify(trainers))
         setShow(true)

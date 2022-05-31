@@ -16,11 +16,9 @@ import './Pokemon.scss'
 function Pokemon() {
   const { gen = '1' } = useParams()
   const navigate = useNavigate()
-  
-  // let pokemonList
 
   let trainers: Trainer[] = JSON.parse(localStorage.getItem('trainers') as string)
-  let currentTrainer: Trainer = JSON.parse(sessionStorage.getItem('currentUser') as string)[0]
+  let currentTrainer: Trainer = JSON.parse(sessionStorage.getItem('currentUser') as string)
 
   const [randomPokemon, setRandomPokemon] = useState([])
   const [isLoading, setisLoading] = useState(false)
@@ -37,8 +35,12 @@ function Pokemon() {
   }
 
   const getGenerationPokemon = async (gen: any) => {
-    if (gen >= 9) return
     setisLoading(true)
+    let pokemonData = localStorage.getItem('pokemonData') as string
+    if (pokemonData) {
+      let data = JSON.parse(pokemonData)
+      console.log(data)
+    }
     let arr = await PokemonService.getGenerationData(gen)
       .then(({ pokemon_species }) => {
         return UtilityService.randomItemfromArray(pokemon_species.map((x: any) => x.name), 10)
@@ -89,8 +91,8 @@ function Pokemon() {
     currentTrainer.pokemon.push(pokemon.name)
     
     TrainerService.updateTrainer(currentTrainer)
-      .then((trainer: Trainer) => {
-        sessionStorage.setItem('currentUser', JSON.stringify([trainer]))
+      .then((trainer: any) => {
+        sessionStorage.setItem('currentUser', JSON.stringify(trainer))
         trainers = trainers.map((t: Trainer) => t.id === trainer.id ? {...t, pokemon: trainer.pokemon} : t)
         localStorage.setItem('trainers', JSON.stringify(trainers))
         setShow(true)

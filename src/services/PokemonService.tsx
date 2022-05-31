@@ -8,6 +8,13 @@ export class PokemonService {
     static apiURL = 'https://pokeapi.co/api/v2'
 
     //Functions
+    static setDefaults = () => {
+        axios.defaults.baseURL = PokemonService.apiURL
+        axios.defaults.headers.post['Content-Type'] = 'application/json'
+        axios.defaults.headers.put['Content-Type'] = 'application/json'
+        axios.defaults.headers.patch['Content-Type'] = 'application/json'
+    }
+
     public static getPokemonsList = () => {
         return axios.get(`${this.apiURL}/pokemon?limit=910`)
             .then(({ data: { results } }) => results)
