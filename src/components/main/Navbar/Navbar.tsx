@@ -43,8 +43,8 @@ useEffect(() => {
 
 return (
     <header ref={wrapperRef} className='d-flex flex-row justify-content-around align-items-center navbar-fixed-top'>
-      <div className='p-2 d-flex align-items-center'>
-        <h3 className=''>Pokemon Trainer Hub</h3>
+      <div className='brand p-2 d-flex align-items-center'>
+        <h3 className='m-0'>Pokemon Trainer Hub</h3>
       </div>
       <nav className='navbar-new p-2 d-flex align-items-center'>
         <button className="btn p-2 bar-icon" onClick={() => setIsNavExpanded(!isNavExpanded)}>

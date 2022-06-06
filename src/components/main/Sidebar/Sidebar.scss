@@ -3,45 +3,30 @@ aside {
     height: 100%;
     position: fixed;
     padding-bottom: 95px;
-    z-index: 3;
-}
-
-.desktop-sidebar {
-    height: 100%;
-    display: block;
-}
-
-.mobile-popup {
-    height: 100%;
-    display: none;
-}
-
-.sidebar-div {
-    background-color: #757575;
-    height: 100%;
-}
-
-.expanded {
-    display: block;
-}
-
-.closed {
-    display: none;
-}
-
-h3 {
-    margin: 0;
-    color: white;
-}
-
-li a {
-    display: block;
+    z-index: 1;
 }
 
 .sidenav {
+    background-color: gray;
+    height: 100%;
+    display: none;
+}
+
+.expanded-sidenav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidenav-title {
+    color: aliceblue;
+}
+
+.sidenav-links {
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 100%;
 }
 
 .sidenav-item {
@@ -49,41 +34,62 @@ li a {
     border-bottom: 2px solid white;
 }
 
-.active-li {
+.sidenav-item.active-li {
     background-color: #999;
 }
 
-.active {
-    color: #252525;
-}
-
-.toggle-btn {
+.expand-btn {
     position: absolute;
-    top: 5px;
-    border-radius: 0;
-    background-color: #757575;
-    color: white;
-    font-weight: 700;
+    top: 0;
+    z-index: 1;
 }
 
-.toggle-btn:focus {
+.expand-btn:focus {
     box-shadow: none;
 }
 
 .navbar-btn {
     display: none;
-    position: absolute;
-    bottom: 115px;
-    left: 15px;
-    border: 1px solid black;
-    border-radius: 10px;
 }
 
 @media screen and (max-width: 768px) {
-    .sidebar-div, .toggle-btn {
+
+    .expand-btn {
         display: none;
     }
-    .navbar-btn, .sidenav {
+
+    .sidenav {
+        display: none;
+        height: 30rem;
+        position: absolute;
+        bottom: 150px;
+        width: 100%;
+        left: 15px;
+    }
+
+    .open-sidenav {
+        display: flex;
+    }
+
+    .sidenav-title {
+        display: none;
+    }
+
+    .sidenav-links {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+    .sidenav-links li:last-child {
+        border-bottom: none;
+    }
+
+    .navbar-btn {
         display: block;
+        position: absolute;
+        bottom: 105px;
+        left: 10px;
     }
 }
