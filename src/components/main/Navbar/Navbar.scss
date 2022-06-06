@@ -5,11 +5,7 @@ header {
 }
 
 .brand {
-    height: 100%;
-}
-
-img {
-    width: 110px;
+    color: #e6e6e6;
 }
 
 .nav-new {
@@ -22,10 +18,17 @@ img {
     padding: 0;
     color: #e6e6e6;
     font-size: 1.25rem;
+    display: flex;
+    flex-direction: row;
 }
 
 .nav-item {
     padding: 0.5rem;
+}
+
+.nav-item:hover {
+    background-color: #585858;
+    border-radius: 5%
 }
 
 li a {
@@ -40,4 +43,40 @@ li a {
 
 a:hover {
     color: unset;
+}
+
+.bar-icon {
+    display: none;
+    color: #e6e6e6;
+}
+.bar-icon:hover {
+    color: #e6e6e6;
+}
+
+@media screen and (max-width: 768px) {
+
+    .bar-icon {
+        display: block;
+    }
+
+    .nav-links {
+        visibility: hidden;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        flex-direction: column;
+        width: 100%;
+        background-color: #303030;
+        color: #e6e6e6;
+    }
+
+    .nav-links li {
+        text-align: center;
+        margin: 0.5rem;
+    }
+
+    .nav-expanded {
+        visibility: visible;
+    }
+
 }
