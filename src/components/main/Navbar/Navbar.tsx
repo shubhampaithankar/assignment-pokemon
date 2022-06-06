@@ -7,10 +7,11 @@ import './Navbar.scss'
 
 //services
 import { TrainerService } from '../../../services'
-import { NavLink, useNavigate, } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate, } from 'react-router-dom'
 
 function Navbar({ isLoggedIn, setIsLoggedIn, isNavExpanded, setIsNavExpanded }: any) {
 
+const location = useLocation()
 const navigate = useNavigate()
 const wrapperRef = useRef<any>()
 
@@ -20,20 +21,24 @@ const OnLogOut = () => {
   navigate('/')
 }
 
-const handleClickOutside = (event: Event) => {
-  if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-    setIsNavExpanded(false)
-  }
+const onLocationChange = (location: any) => {
+  setIsNavExpanded(false)
 }
 
+
 useEffect(() => {
+  const handleClickOutside = (event: Event) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      setIsNavExpanded(false)
+    }
+  }
+  onLocationChange(location)
   document.addEventListener("click", handleClickOutside, false)
-  document.addEventListener("scroll", handleClickOutside, { passive: true })
   return () => {
     document.removeEventListener("click", handleClickOutside, false)
-    document.removeEventListener("scroll", handleClickOutside, false)
   }
-})
+   // eslint-disable-next-line
+}, [location])
 
 
 return (
@@ -58,16 +63,9 @@ return (
           </>
           ) : null }
         </ul>
-        <Dropdown name={'ash'} />
       </nav>
     </header>
   )
 }
 
 export default Navbar
-const Dropdown = (name: any) => {
-return (
-<>
-</>
-)
-}

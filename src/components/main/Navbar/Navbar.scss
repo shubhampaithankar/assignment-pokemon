@@ -60,7 +60,7 @@ a:hover {
     }
 
     .nav-links {
-        display: none;
+        visibility: hidden;
         position: absolute;
         top: 60px;
         left: 0;
@@ -76,7 +76,7 @@ a:hover {
     }
 
     .nav-expanded {
-        display: block;
+        visibility: visible;
     }
 
 }
