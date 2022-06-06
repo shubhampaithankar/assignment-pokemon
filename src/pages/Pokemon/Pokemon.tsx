@@ -136,7 +136,7 @@ function Pokemon() {
                 {randomPokemon?.map((pokemon: PokemonModel, i) => {
                 return (
                 <div key={i}
-                  className="col-lg-2 col-md-3 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
+                  className="col-lg-2 col-md-5 col-sm-12 p-0 m-2 d-flex align-items-center justify-content-center">
                   <PokemonCard pokemon={pokemon} btnName={'Catch'} btnFunction={()=> catchPokemon(pokemon)}
                     trainer={currentTrainer} />
                 </div>

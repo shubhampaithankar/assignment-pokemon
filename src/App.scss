@@ -9,3 +9,13 @@
 .expanded-sidebar {
   padding-left: 220px;
 }
+
+.expanded-navbar {
+  padding-top: 181px;
+}
+
+@media screen and (max-width: 768px) {
+  .expanded-sidebar {
+    padding-left: 0;
+  }
+}
